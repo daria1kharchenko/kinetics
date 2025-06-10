@@ -30,7 +30,7 @@ def browse_files():
             time = parse_time(name)
 
             # Читання файлу та додавання до DataFrame
-            df_file = pd.read_csv(file, sep='\s+', index_col=0, names=['nm', time])
+            df_file = pd.read_csv(file, sep=r'\s+', index_col=0, names=['nm', time])
 
             # Перетворюємо індекси в рядки для роботи з методом .str
             df_file.index = df_file.index.astype(str)
