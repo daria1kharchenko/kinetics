@@ -4,6 +4,20 @@ import os
 import pandas as pd
 import re
 
+
+def parse_time(filename: str) -> int:
+    """Parse time value from filename and return seconds."""
+    hours = re.findall(r"[0-9]+(?=h)", filename)
+    hours = int(hours[0]) if hours else 0
+
+    minutes = re.findall(r"[0-9]+(?=min)", filename)
+    minutes = int(minutes[0]) if minutes else 0
+
+    seconds = re.findall(r"[0-9]+(?=s)", filename)
+    seconds = int(seconds[0]) if seconds else 0
+
+    return seconds + minutes * 60 + hours * 3600
+
 def browse_files():
     file_paths = filedialog.askopenfilenames(filetypes=[("Text files", "*.dat")])
     df = pd.DataFrame({'nm': range(400, 601)})
@@ -12,17 +26,8 @@ def browse_files():
         for file in file_paths:
             name = os.path.basename(file)
 
-            # Використання регулярних виразів для отримання годин, хвилин і секунд
-            hours = re.findall('[0-9]+(?=h)', name)
-            hours = int(hours[0]) if hours else 0
-            
-            minutes = re.findall("[0-9]+(?=min)", name)
-            minutes = int(minutes[0]) if minutes else 0
-            
-            seconds = re.findall("[0-9]+(?=s)", name)
-            seconds = int(seconds[0]) if seconds else 0
-            
-            time = seconds + minutes * 60 + hours * 3600
+            # Отримуємо час з назви файлу
+            time = parse_time(name)
 
             # Читання файлу та додавання до DataFrame
             df_file = pd.read_csv(file, sep='\s+', index_col=0, names=['nm', time])
