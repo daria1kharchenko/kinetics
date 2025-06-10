@@ -49,7 +49,7 @@ def browse_files():
                 print(df_file)
 
                 # Об'єднуємо DataFrame тільки якщо df_file не порожній
-                df = pd.concat([df.set_index('nm'), df_file], axis=1).reset_index()
+                df = df.merge(df_file, left_on='nm', right_index=True, how='left')
 
         # Збереження результатів у файл
         directory_path = os.path.dirname(file_paths[0])  # Отримання шляху до каталогу
